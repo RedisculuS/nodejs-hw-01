@@ -1,10 +1,10 @@
-import fs from 'node:fs/promises';
-import { PATH_DB } from '../constants/contacts.js';
 import { createFakeContact } from '../utils/createFakeContact.js';
+import { readContacts } from '../utils/readContacts.js';
+import { writeContacts } from '../utils/writeContacts.js';
 
 const generateContacts = async (number) => {
   try {
-    const fileContent = await fs.readFile(PATH_DB, 'utf-8');
+    const fileContent = await readContacts();
     const contacts = JSON.parse(fileContent);
 
     for (let i = 0; i < number; i++) {
@@ -12,7 +12,7 @@ const generateContacts = async (number) => {
       contacts.push(newContact);
     }
 
-    await fs.writeFile(PATH_DB, JSON.stringify(contacts, null, 2), 'utf-8');
+    await writeContacts(JSON.stringify(contacts, null, 2));
     console.log('Data successfully added');
   } catch (error) {
     console.error('Error while adding data to file', error);
